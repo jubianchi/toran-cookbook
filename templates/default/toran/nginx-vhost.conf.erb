@@ -1,0 +1,26 @@
+upstream php5-fpm-sock {
+    server unix:/var/run/<%= node[:toran][:app][:name] %>.sock;
+}
+
+server {
+	listen 80 default_server;
+
+	root <%= @node[:toran][:app][:directory] %>/web;
+
+	index app.php;
+
+	access_log /var/log/nginx/<%= node[:toran][:app][:name] %>-access.log;
+	error_log /var/log/nginx/<%= node[:toran][:app][:name] %>-error.log;
+
+	location / {
+		try_files $uri $uri/ /app.php?$args;
+	}
+
+	location ~ \.php$ {
+		try_files $uri =404;
+		fastcgi_index app.php;
+		fastcgi_pass php5-fpm-sock;
+		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+		include /etc/nginx/fastcgi_params;
+	}
+}

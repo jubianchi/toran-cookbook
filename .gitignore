@@ -1,0 +1,16 @@
+*~
+*#
+.#*
+\#*#
+.*.sw[a-z]
+*.un~
+pkg/
+vendor/
+
+# Berkshelf
+.vagrant
+
+# Bundler
+bin/*
+.bundle/*
+

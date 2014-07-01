@@ -1,0 +1,22 @@
+<VirtualHost *:80>
+    ServerName <%= node[:toran][:app][:name] %>
+    ServerAdmin admin@<%= node[:toran][:app][:name] %>
+    DocumentRoot <%= @node[:toran][:app][:directory] %>/web
+    DirectoryIndex app.php
+
+    # Fast CGI + FPM
+    FastCgiExternalServer <%= @node[:toran][:app][:directory] %>/cgi-bin/php5.external -socket /var/run/<%= node[:toran][:app][:name] %>.sock
+    Alias /cgi-bin/ <%= @node[:toran][:app][:directory] %>/cgi-bin/
+
+    <Directory <%= @node[:toran][:app][:directory] %>/web>
+        Options SymLinksIfOwnerMatch
+        AllowOverride All
+        Order allow,deny
+        Allow from all
+    </Directory>
+
+    # Log
+    ErrorLog /var/log/apache2/<%= node[:toran][:app][:name] %>-error.log
+    LogLevel warn
+    CustomLog /var/log/apache2/<%= node[:toran][:app][:name] %>-access.log combined
+</VirtualHost>

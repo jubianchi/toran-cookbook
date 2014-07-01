@@ -1,0 +1,15 @@
+[<%= node[:toran][:app][:name] %>]
+listen = /var/run/<%= node[:toran][:app][:name] %>.sock
+
+listen.owner = <%= node[:toran][:app][:user] %>
+listen.group = <%= node[:toran][:app][:group] %>
+listen.mode = 0666
+
+user = <%= node[:toran][:app][:user] %>
+group = <%= node[:toran][:app][:group] %>
+
+pm = dynamic
+pm.max_children = 20
+pm.start_servers = 5
+pm.min_spare_servers = 5
+pm.max_spare_servers = 10
